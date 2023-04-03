@@ -1,53 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:game/controllers/play_controller.dart';
 import 'package:get/get.dart';
-import 'package:sound_cloud/controller.dart';
 import 'package:lottie/lottie.dart';
 
-class PlayPage extends GetView<PlayController> {
-  const PlayPage({super.key});
-
+class PlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<PlayController>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: CircleAvatar(
-                radius: 23,
-                backgroundColor: Colors.grey,
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.grey[100],
-                  backgroundImage: const NetworkImage(
-                      'https://xsgames.co/randomusers/avatar.php?g=male'),
-                ),
-              ),
-            ),
-            const Text('2'),
-            const Text('-'),
-            const Text('3'),
-            GestureDetector(
-              onTap: () {},
-              child: CircleAvatar(
-                radius: 23,
-                backgroundColor: Colors.grey,
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.grey[100],
-                  backgroundImage: const NetworkImage(
-                      'https://xsgames.co/randomusers/avatar.php?g=female'),
-                ),
-              ),
-            ),
-          ],
-        ),
+        title: score(),
         titleTextStyle: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w700,
@@ -99,6 +65,7 @@ class PlayPage extends GetView<PlayController> {
             ),
             GestureDetector(
               onTap: () {
+                print('tap');
                 controller.squareSelected1.value =
                     !controller.squareSelected1.value;
               },
@@ -134,6 +101,7 @@ class PlayPage extends GetView<PlayController> {
             ),
             GestureDetector(
               onTap: () {
+                print('tap');
                 controller.circleSelected1.value =
                     !controller.circleSelected1.value;
               },
@@ -203,6 +171,7 @@ class PlayPage extends GetView<PlayController> {
               ),
             ),
             // show result
+            /*
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -281,9 +250,47 @@ class PlayPage extends GetView<PlayController> {
                 ],
               ),
             ),
+          */
           ],
         ),
       ),
+    );
+  }
+
+  Row score() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () {},
+          child: CircleAvatar(
+            radius: 23,
+            backgroundColor: Colors.grey,
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.grey[100],
+              backgroundImage: const NetworkImage(
+                  'https://xsgames.co/randomusers/avatar.php?g=male'),
+            ),
+          ),
+        ),
+        const Text('2'),
+        const Text('-'),
+        const Text('3'),
+        GestureDetector(
+          onTap: () {},
+          child: CircleAvatar(
+            radius: 23,
+            backgroundColor: Colors.grey,
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.grey[100],
+              backgroundImage: const NetworkImage(
+                  'https://xsgames.co/randomusers/avatar.php?g=female'),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
