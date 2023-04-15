@@ -7,25 +7,13 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class ProfileToPlayController extends GetxController {
   RxBool initailLoading = false.obs;
-  RxList<Results> profileToPlayResults = RxList<Results>();
+  RxList<Results> results = RxList<Results>();
   final ProfileToPlayRepository _profileToPlayRepository =
       ProfileToPlayRepository();
   Rxn<TokenResponseModel> tokenModel = Rxn<TokenResponseModel>();
   final TokenRepository tokenRepository = TokenRepository();
   RxBool initApiError = false.obs;
-
-  Future<void> getToken() async {
-    initailLoading(true);
-    final resultOrException = await tokenRepository.getToken();
-    resultOrException.fold((l) {
-      initApiError(true);
-    }, (r) {
-      tokenModel(r);
-      getSuggestCompetitorsList(r.access!);
-
-      initApiError(false);
-    });
-  }
+  RxInt? profileChoseFirst;
 
   Future<void> getSuggestCompetitorsList(String token) async {
     initailLoading(true);
@@ -34,8 +22,8 @@ class ProfileToPlayController extends GetxController {
     resultOrException.fold((l) {
       initApiError(true);
     }, (r) {
-      profileToPlayResults(r.results);
-
+      results.value = r.results as List<Results>;
+      if (r.results == []) {}
       initailLoading(false);
       initApiError(false);
     });

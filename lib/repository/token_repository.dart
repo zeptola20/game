@@ -4,7 +4,7 @@ import 'package:game/models/token_request_model.dart';
 import 'package:game/models/token_response_model.dart';
 
 class TokenRepository {
-  int? myId;
+  static int? myId;
   TokenResponseModel getDialogResult = TokenResponseModel();
   Future<Either<String, TokenResponseModel>> getToken() async {
     final dio = Dio();

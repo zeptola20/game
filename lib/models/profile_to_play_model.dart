@@ -1,7 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'profile_to_play_model.g.dart';
-
-@JsonSerializable()
 class ProfileToPlayModel {
   int? count;
   String? next;
@@ -10,12 +6,30 @@ class ProfileToPlayModel {
 
   ProfileToPlayModel({this.count, this.next, this.previous, this.results});
 
-  factory ProfileToPlayModel.fromJson(Map<String, dynamic> data) =>
-      _$ProfileToPlayModelFromJson(data);
-  Map<String, dynamic> toJson() => _$ProfileToPlayModelToJson(this);
+  ProfileToPlayModel.fromJson(Map<String, dynamic> json) {
+    count = json['count'];
+    next = json['next'];
+    previous = json['previous'];
+    if (json['results'] != null) {
+      results = <Results>[];
+      json['results'].forEach((v) {
+        results!.add(Results.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['count'] = count;
+    data['next'] = next;
+    data['previous'] = previous;
+    if (results != null) {
+      data['results'] = results!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-@JsonSerializable()
 class Results {
   int? id;
   int? user;
@@ -25,7 +39,21 @@ class Results {
 
   Results({this.id, this.user, this.image, this.userName, this.email});
 
-  factory Results.fromJson(Map<String, dynamic> data) =>
-      _$ResultsFromJson(data);
-  Map<String, dynamic> toJson() => _$ResultsToJson(this);
+  Results.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    user = json['user'];
+    image = json['image'];
+    userName = json['user_name'];
+    email = json['email'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user'] = user;
+    data['image'] = image;
+    data['user_name'] = userName;
+    data['email'] = email;
+    return data;
+  }
 }

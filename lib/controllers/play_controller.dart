@@ -11,11 +11,28 @@ class PlayController extends GetxController {
   var circleSelected1 = false.obs;
   var squareSelected1 = false.obs;
   var triangleSelected1 = false.obs;
+  var selectSuggestButton = false.obs;
+  RxBool endRound = false.obs;
+
+  int currentCardIndex = 0;
+  //when swiping between suggest and game me the index must start from first of list
+  RxBool isGameMe = true.obs;
   @override
   void onInit() {
-    print('onInit');
     Get.find<GameMeController>().getToken();
+    // Get.find<ProfileToPlayController>().getToken();
     super.onInit();
+  }
+
+  onSwipe() {
+    debugPrint('swiped');
+  }
+
+  onEnd() {
+    //deleting card after finish game and swiper
+    if (Get.find<GameMeController>().results[currentCardIndex].completed ==
+        // ignore: list_remove_unrelated_type
+        true) Get.find<GameMeController>().results.remove(currentCardIndex);
   }
 }
 

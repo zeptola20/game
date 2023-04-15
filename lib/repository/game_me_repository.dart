@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:game/models/game_me_model.dart';
 
 class GameMeRepository {
@@ -14,10 +15,13 @@ class GameMeRepository {
         getResult = GameMeModel.fromJson(
           value.data as Map<String, dynamic>,
         );
-      }).onError((error, stackTrace) {});
+      }).onError((error, stackTrace) {
+        debugPrint('error$error');
+      });
 
       return Right(getResult!);
     } catch (e) {
+      debugPrint('error$e');
       return Left(e.toString());
     }
   }

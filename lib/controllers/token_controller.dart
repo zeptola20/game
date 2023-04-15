@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:game/models/token_response_model.dart';
 import 'package:game/repository/token_repository.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -19,7 +20,7 @@ class TokenController extends GetxController {
       initApiError(true);
     }, (r) {
       id = r.id;
-      print(r.access);
+      debugPrint(r.access);
       tokenModel(r);
 
       initApiError(false);
