@@ -23,11 +23,11 @@ class CardWidget extends StatelessWidget {
       required this.profilePlayController,
       required this.index,
       required this.isGameMe}) {
-    if (isGameMe) {
-      gameController.changeScore(
-          gameController.results[index].player1Won as int,
-          gameController.results[index].player2Won as int);
-    }
+    // if (isGameMe) {
+    //   gameController.changeScore(
+    //       gameController.results[index].player1Won as int,
+    //       gameController.results[index].player2Won as int);
+    // }
   }
 
   @override
@@ -92,9 +92,10 @@ class CardWidget extends StatelessWidget {
                       //delete card
                       gameController.results
                           .remove(gameController.results[index]);
-                      Get.find<SocketController>().cancelGame(
-                          gameController.results[index].player2.toString(),
-                          gameController.results[index].id as int);
+
+                      if (gameController.results.isNotEmpty)
+                        Get.find<SocketController>().cancelGame(
+                            gameController.results[index].id as int);
                     },
                     child: const Icon(
                       Icons.close,
@@ -114,8 +115,9 @@ class CardWidget extends StatelessWidget {
             index: index),
 
         // show result
-        if (gameController.results[index].completed == true)
-          ShowResult(index: index),
+        if (gameController.results.isNotEmpty)
+          if (gameController.results[index].completed == true)
+            ShowResult(index: index),
       ],
     );
   }

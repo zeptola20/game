@@ -37,8 +37,10 @@ class _OptionsIconState extends State<OptionsIcon> {
 //stop touch 2 times
   bool firstTouch = true;
 //send item we select
-  _selectSendItem(OptionsItem item, int gameId, String opponent) {
+  _selectSendItem(OptionsItem item, int gameId) {
     //if both not choose
+    if (widget.gameMeController.results.isNotEmpty)
+    // ignore: curly_braces_in_flow_control_structures
     if (widget.gameMeController.results[widget.index].lastRound!
                 .player1Choice ==
             null &&
@@ -80,18 +82,22 @@ class _OptionsIconState extends State<OptionsIcon> {
     }
     //sending choose
     widget.playController.isGameMe.value
-        ? _socketController.sendResponse(opponent, OptionsItem.rock, gameId)
-        : _socketController.startGame(opponent, item);
+        ? _socketController.sendResponse(OptionsItem.rock, gameId)
+        : _socketController.startGame(item);
     if (Get.find<PlayController>().endRound.value) {
       widget.gameMeController.resultRoundWinner.value = widget.gameMeController
           .winnerRound(
-              widget.gameMeController.results[widget.index].lastRound!
-                  .player1Choice as int,
-              widget.gameMeController.results[widget.index].lastRound!
-                  .player2Choice as int);
+              int.parse(widget.gameMeController.results[widget.index].lastRound!
+                      .player1Choice
+                      .toString()) +
+                  1,
+              int.parse(widget.gameMeController.results[widget.index].lastRound!
+                      .player2Choice
+                      .toString()) +
+                  1);
     }
 //detect winner round
-    if (widget.gameMeController.resultRoundWinner.value == 3) {
+    if (widget.gameMeController.resultRoundWinner.value == 4) {
       // equal
       Future.delayed(const Duration(milliseconds: 1000)).then(
           (value) => widget.gameMeController.cancelChooseEndRound.value = true);
@@ -146,6 +152,23 @@ class _OptionsIconState extends State<OptionsIcon> {
     late bool play2Enemy;
     var temp = Rx(temp1);
     if (widget.isGameMe) {
+      //set opponent for start game methode
+      _socketController.opponent.value = widget
+          .gameMeController.results[widget.index].opponentProfile!.user
+          .toString();
+      if (widget.gameMeController.results.isNotEmpty)
+      // ignore: curly_braces_in_flow_control_structures
+      if (widget.gameMeController.results[widget.index].lastRound!
+                  .player1Choice !=
+              null &&
+          widget.gameMeController.results[widget.index].lastRound!
+                  .player2Choice !=
+              null) {
+        Get.find<PlayController>().endRound.value =
+            true; //not show message waite for .. when round ends
+      }
+      if (widget.gameMeController.results.isNotEmpty)
+      // ignore: curly_braces_in_flow_control_structures
       if (widget.gameMeController.results[widget.index].player2 ==
           widget.gameMeController.results[widget.index].opponentProfile!.user) {
         play2Enemy = true;
@@ -173,6 +196,9 @@ class _OptionsIconState extends State<OptionsIcon> {
         }
       }
     } else if (!widget.isGameMe) {
+      //set opponent for start game methode
+      _socketController.opponent.value =
+          widget.profileToPlayController.results[widget.index].user.toString();
       var s = Results(
           completed: false,
           id: widget.profileToPlayController.results[widget.index].id,
@@ -196,16 +222,13 @@ class _OptionsIconState extends State<OptionsIcon> {
     }
 
     return Stack(
-      children: [
-        RockWidget(temp),
-        PaperWidget(temp),
-        ScissorsWidget(temp),
-      ],
-    );
+        children: [RockWidget(temp), PaperWidget(temp), ScissorsWidget(temp)]);
   }
 
   // ignore: non_constant_identifier_names
-  GestureDetector ScissorsWidget(Rx<dynamic> temp) {
+  GestureDetector ScissorsWidget(
+    Rx<dynamic> temp,
+  ) {
     return GestureDetector(
       onTap: !widget.isTop
           ? () {
@@ -219,19 +242,17 @@ class _OptionsIconState extends State<OptionsIcon> {
                 if (widget.playController.isGameMe.value &&
                     temp.value == null) {
                   _selectSendItem(
-                      OptionsItem.scissors,
-                      widget.gameMeController.results[widget.index].id as int,
-                      widget.gameMeController.results[widget.index].player2
-                          .toString());
+                    OptionsItem.scissors,
+                    widget.gameMeController.results[widget.index].id as int,
+                  );
                   temp.value = OptionsItem.scissors.index;
                 } else if (widget.playController.isGameMe.value == false &&
                     temp.value == null) {
                   _selectSendItem(
-                      OptionsItem.scissors,
-                      widget.profileToPlayController.results[widget.index].id
-                          as int,
-                      widget.profileToPlayController.results[widget.index].user
-                          .toString());
+                    OptionsItem.scissors,
+                    widget.profileToPlayController.results[widget.index].id
+                        as int,
+                  );
                   temp.value = OptionsItem.scissors.index;
                 }
               } else if (!firstTouch) {
@@ -278,7 +299,9 @@ class _OptionsIconState extends State<OptionsIcon> {
   }
 
   // ignore: non_constant_identifier_names
-  GestureDetector PaperWidget(Rx<dynamic> temp) {
+  GestureDetector PaperWidget(
+    Rx<dynamic> temp,
+  ) {
     return GestureDetector(
       onTap: !widget.isTop
           ? () {
@@ -292,19 +315,17 @@ class _OptionsIconState extends State<OptionsIcon> {
                 if (widget.playController.isGameMe.value &&
                     temp.value == null) {
                   _selectSendItem(
-                      OptionsItem.paper,
-                      widget.gameMeController.results[widget.index].id as int,
-                      widget.gameMeController.results[widget.index].player2
-                          .toString());
+                    OptionsItem.paper,
+                    widget.gameMeController.results[widget.index].id as int,
+                  );
                   temp.value = OptionsItem.paper.index;
                 } else if (widget.playController.isGameMe.value == false &&
                     temp.value == null) {
                   _selectSendItem(
-                      OptionsItem.paper,
-                      widget.profileToPlayController.results[widget.index].id
-                          as int,
-                      widget.profileToPlayController.results[widget.index].user
-                          .toString());
+                    OptionsItem.paper,
+                    widget.profileToPlayController.results[widget.index].id
+                        as int,
+                  );
                   temp.value = OptionsItem.paper.index;
                 }
               } else if (!firstTouch) {
@@ -368,20 +389,17 @@ class _OptionsIconState extends State<OptionsIcon> {
                       temp.value == null) {
                     //when we select option in profile to play
                     _selectSendItem(
-                        OptionsItem.rock,
-                        widget.gameMeController.results[widget.index].id as int,
-                        widget.gameMeController.results[widget.index].player2
-                            .toString());
+                      OptionsItem.rock,
+                      widget.gameMeController.results[widget.index].id as int,
+                    );
                     temp.value = OptionsItem.rock.index;
                   } else if (widget.playController.isGameMe.value == false &&
                       temp.value == null) {
                     _selectSendItem(
-                        OptionsItem.rock,
-                        widget.profileToPlayController.results[widget.index].id
-                            as int,
-                        widget
-                            .profileToPlayController.results[widget.index].user
-                            .toString());
+                      OptionsItem.rock,
+                      widget.profileToPlayController.results[widget.index].id
+                          as int,
+                    );
                     temp.value = OptionsItem.rock.index;
                   }
                 }

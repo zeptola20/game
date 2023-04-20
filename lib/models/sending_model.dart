@@ -3,7 +3,7 @@ class SendingModel {
     return {
       'msg_type': 1,
       'opponent': opponent,
-      'choice': choice.index,
+      'choice': choice.index + 1,
     };
   }
 
@@ -12,7 +12,7 @@ class SendingModel {
       'msg_type': 5,
       'game_id': gameId,
       'opponent': opponent,
-      'choice': choice.index,
+      'choice': choice.index + 1,
     };
   }
 }

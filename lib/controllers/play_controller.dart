@@ -30,9 +30,16 @@ class PlayController extends GetxController {
 
   onEnd() {
     //deleting card after finish game and swiper
-    if (Get.find<GameMeController>().results[currentCardIndex].completed ==
+    if (Get.find<GameMeController>()
+        .results
+        // ignore: curly_braces_in_flow_control_structures
+        .isNotEmpty) if (Get.find<GameMeController>()
+            .results[currentCardIndex]
+            .completed ==
         // ignore: list_remove_unrelated_type
-        true) Get.find<GameMeController>().results.remove(currentCardIndex);
+        true) {
+      Get.find<GameMeController>().results.remove(currentCardIndex);
+    }
   }
 }
 

@@ -20,8 +20,7 @@ class GameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (gameController.listEmpty.value &&
-          playController.isGameMe.value == true &&
-          gameController.listEmpty.value == true) {
+          playController.isGameMe.value == true) {
         return const Center(
           child: Text('there is no card for showing'),
         );
@@ -75,7 +74,7 @@ class GameCard extends StatelessWidget {
                                 null &&
                             playController.endRound.value == false
                         ? Align(
-                            alignment: Alignment.center,
+                            alignment: Alignment.topCenter,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -130,20 +129,21 @@ class GameCard extends StatelessWidget {
           cardBuilder: (BuildContext context, int index) {
             playController.currentCardIndex = index;
             return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                        profilePlayController.results[index].image.toString()),
-                    fit: BoxFit.cover,
-                  ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: NetworkImage(
+                      profilePlayController.results[index].image.toString()),
+                  fit: BoxFit.cover,
                 ),
-                child: CardWidget(
-                    gameController: gameController,
-                    playController: playController,
-                    profilePlayController: profilePlayController,
-                    index: index,
-                    isGameMe: playController.isGameMe.value));
+              ),
+              child: CardWidget(
+                  gameController: gameController,
+                  playController: playController,
+                  profilePlayController: profilePlayController,
+                  index: index,
+                  isGameMe: playController.isGameMe.value),
+            );
           },
         );
       }

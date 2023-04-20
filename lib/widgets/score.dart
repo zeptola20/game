@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:game/controllers/play_controller.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_getx_widget.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../controllers/game_me_controller.dart';
 
@@ -31,7 +31,8 @@ class Score extends StatelessWidget {
                           .toString()
                       : 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png'),
             )),
-        GetX<GameMeController>(
+        GetBuilder<GameMeController>(
+          id: 'score',
           builder: (_) {
             return Text(Get.find<PlayController>().isGameMe.value
                 ? Get.find<GameMeController>().player1Won.toString()
@@ -39,7 +40,8 @@ class Score extends StatelessWidget {
           },
         ),
         const Text('-'),
-        GetX<GameMeController>(
+        GetBuilder<GameMeController>(
+          id: 'score',
           builder: (_) {
             return Text(Get.find<PlayController>().isGameMe.value
                 ? Get.find<GameMeController>().player2Won.toString()

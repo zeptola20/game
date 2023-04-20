@@ -6,7 +6,11 @@ import 'package:get/get.dart';
 
 import '/repository/token_repository.dart';
 
-enum OptionsItem { rock, paper, scissors }
+enum OptionsItem {
+  rock,
+  paper,
+  scissors,
+}
 
 class GameMeController extends GetxController {
   RxBool initailLoading = false.obs;
@@ -25,7 +29,7 @@ class GameMeController extends GetxController {
   changeScore(int player1, int player2) {
     player1Won = player1;
     player2Won = player2;
-    update();
+    update(['score']);
   }
 
   Future<void> getToken() async {
@@ -68,19 +72,19 @@ class GameMeController extends GetxController {
   }
 
   int winnerRound(int player1choose, int player2choose) {
-    if (player1choose == 0 && player2choose == 1) {
+    if (player1choose == 1 && player2choose == 2) {
       return player2choose;
-    } else if (player1choose == 0 && player2choose == 2) {
+    } else if (player1choose == 1 && player2choose == 3) {
       return player1choose;
-    } else if (player1choose == 1 && player2choose == 2) {
+    } else if (player1choose == 2 && player2choose == 3) {
       return player2choose;
-    } else if (player1choose == 1 && player2choose == 0) {
-      return player2choose;
-    } else if (player1choose == 2 && player2choose == 0) {
-      return player1choose;
     } else if (player1choose == 2 && player2choose == 1) {
       return player2choose;
+    } else if (player1choose == 3 && player2choose == 1) {
+      return player1choose;
+    } else if (player1choose == 3 && player2choose == 2) {
+      return player2choose;
     }
-    return 3; //same each other
+    return 4; //same each other
   }
 }

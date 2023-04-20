@@ -19,7 +19,7 @@ class PlayPage extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           automaticallyImplyLeading: false,
-          title: const Score(),
+          title: Score(),
           titleTextStyle: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w700,

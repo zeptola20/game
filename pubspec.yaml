@@ -41,7 +41,6 @@ dependencies:
   dio: ^5.0.1
   dartz: ^0.10.1
   web_socket_channel: ^2.3.0
-  fluttertoast: ^8.2.1
   flutter_card_swiper: ^4.1.0+2
 dev_dependencies:
   flutter_test:

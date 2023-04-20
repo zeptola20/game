@@ -12,24 +12,25 @@ import 'dart:convert';
 
 class SocketController extends GetxController {
   late WebSocketChannel channelNew;
-  RxBool textToast = false.obs;
+  RxString opponent = ''.obs;
   listenWebsocket() {
     channelNew = WebSocketChannel.connect(Uri.parse(
         'wss://atrovers.iran.liara.run/game_ws/${Get.find<GameMeController>().id}/'));
+
     channelNew.stream.listen((event) {
+      print('event$event');
       if (Results.fromJson(jsonDecode(event)).msg_type == 1) {
         Get.find<GameMeController>()
             .results
             .insert(0, Results.fromJson(jsonDecode(event)));
-      } else if (Results.fromJson(jsonDecode(event)).msg_type == 5) {
-        textToast.value = true;
-      }
+      } else if (Results.fromJson(jsonDecode(event)).msg_type == 5) {}
     });
   }
 
 //start game with some one
-  startGame(String opponent, Enum choice) {
-    channelNew.sink.add(jsonEncode(SendingModel().startGame(opponent, choice)));
+  startGame(Enum choice) {
+    channelNew.sink
+        .add(jsonEncode(SendingModel().startGame(opponent.value, choice)));
     Get.find<PlayController>().selectSuggestButton.value = false;
     Get.find<PlayController>().isGameMe.value = true;
     Get.find<GameMeController>()
@@ -37,22 +38,20 @@ class SocketController extends GetxController {
   }
 
 //response to game
-  sendResponse(String opponent, Enum choice, int gameId) {
-    textToast.value = false;
+  sendResponse(Enum choice, int gameId) {
     try {
-      channelNew.sink.add(
-          jsonEncode(SendingModel().sendResponse(opponent, choice, gameId)));
+      channelNew.sink.add(jsonEncode(
+          SendingModel().sendResponse(opponent.value, choice, gameId)));
     } catch (e) {
       debugPrint('error send: $e');
     }
   }
 
-  cancelGame(String opponent, int gameId) {
+  cancelGame(int gameId) {
     try {
       channelNew.sink.add(jsonEncode({
         'msg_type': 2,
         'game_id': gameId,
-        'opponent': opponent,
       }));
     } catch (e) {
       debugPrint('cancel game error:$e');
